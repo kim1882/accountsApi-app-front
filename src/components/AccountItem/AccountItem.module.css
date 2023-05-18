@@ -1,0 +1,23 @@
+.card {
+  margin: 1rem;
+  max-height: 14rem;
+}
+
+.deleteBtn:hover {
+  color: black;
+}
+
+.content {
+  color: gray;
+}
+
+.actions {
+  justify-content: right;
+}
+
+.actionBtn {
+  text-transform: capitalize;
+}
+.actionBtn:hover {
+  background-color: lightgray;
+}

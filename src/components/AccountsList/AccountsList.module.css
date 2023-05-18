@@ -1,0 +1,24 @@
+.content {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: auto;
+  grid-template-areas:
+    "accountsTitle createAccountBtn"
+    "accounts accounts";
+}
+
+.title {
+  grid-area: accountsTitle;
+}
+
+.action {
+  grid-area: createAccountBtn;
+  justify-self: end;
+}
+
+.contentBody {
+  margin-top: 2rem;
+  grid-area: accounts;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
