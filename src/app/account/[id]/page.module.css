@@ -1,10 +1,16 @@
 .content {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   grid-template-rows: auto;
   grid-template-areas:
-    "accountsTitle newTransactionBtn"
-    "transactions transactions";
+    "backLink accountsTitle newTransactionBtn"
+    "transactions transactions transactions";
+}
+
+.backLink {
+  grid-area: backLink;
+  display: flex;
+  align-items: center;
 }
 
 .title {

@@ -9,8 +9,18 @@ export const fetchAccounts = () => {
         id: "987654321",
         name: "Second account really long name",
         transactions: [
-          { id: "t1", type: TransactionEnum.DEPOSIT, amount: 250 },
-          { id: "t2", type: TransactionEnum.WITHDRAWAL, amount: 20 },
+          {
+            id: "t1",
+            date: "05/18/2023",
+            type: TransactionEnum.DEPOSIT,
+            amount: 250,
+          },
+          {
+            id: "t2",
+            date: "05/18/2023",
+            type: TransactionEnum.WITHDRAWAL,
+            amount: 20,
+          },
         ],
       },
     ],

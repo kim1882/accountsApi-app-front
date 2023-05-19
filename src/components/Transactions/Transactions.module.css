@@ -1,0 +1,23 @@
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.header {
+  padding: 8px;
+  text-transform: capitalize;
+}
+.row {
+  border-bottom: 1px solid white;
+}
+.cell {
+  padding: 6px;
+  text-align: center;
+}
+.deposit {
+  font-weight: 500;
+  color: green;
+}
+.withdrawal {
+  font-weight: 500;
+  color: red;
+}

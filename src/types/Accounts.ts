@@ -5,6 +5,7 @@ export enum TransactionEnum {
 
 export interface ITransaction {
   id: string;
+  date: string;
   type: TransactionEnum;
   amount: number;
 }
