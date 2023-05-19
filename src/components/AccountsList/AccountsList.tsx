@@ -1,41 +1,51 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Typography, CircularProgress } from "@mui/material";
 import styles from "./AccountsList.module.css";
-import { useEffect, useState } from "react";
-import { IAccount, TransactionEnum } from "@/types/Accounts";
+import { useEffect } from "react";
+import { IAccount } from "@/types/Accounts";
 import AccountItem from "../AccountItem";
+import AddIcon from "@mui/icons-material/Add";
+import {
+  loadAccounts,
+  selectAccounts,
+  selectAccountsError,
+  selectAccountsStatus,
+} from "@/store/accounts.slice";
+import { useAppDispatch } from "@/store";
+import { useSelector } from "react-redux";
 
 const Accounts = () => {
-  const [accounts, setAccounts] = useState<IAccount[]>([]);
+  const dispatch = useAppDispatch();
+  const accounts: IAccount[] = useSelector(selectAccounts);
+  const accountsStatus = useSelector(selectAccountsStatus);
+  const accountsError = useSelector(selectAccountsError);
 
-  //temporary DELETE
   useEffect(() => {
-    const acc: IAccount[] = [
-      { id: "123456789", name: "First account", transactions: [] },
-      {
-        id: "987654321",
-        name: "Second account really long name",
-        transactions: [
-          { id: "t1", type: TransactionEnum.DEPOSIT, amount: 250 },
-          { id: "t2", type: TransactionEnum.WITHDRAWAL, amount: 20 },
-        ],
-      },
-    ];
-    setAccounts(acc);
-  }, []);
+    if (accountsStatus === "idle") dispatch(loadAccounts());
+  }, [dispatch, accountsStatus]);
 
   return (
     <Box mx={4} className={styles.content}>
-      <Typography variant="h3" className={styles.title}>
+      <Typography variant="h4" className={styles.title}>
         Accounts
       </Typography>
       <Button size="small" variant="outlined" className={styles.action}>
-        Create account
+        <AddIcon /> New account
       </Button>
-      <div className={styles.contentBody}>
-        {accounts.map((account) => (
-          <AccountItem key={account.id} account={account} />
-        ))}
-      </div>
+      {accountsStatus === "loading" ? (
+        <CircularProgress />
+      ) : accountsStatus === "succeeded" ? (
+        accounts.length ? (
+          <div className={styles.contentBody}>
+            {accounts.map((account) => (
+              <AccountItem key={account.id} account={account} />
+            ))}
+          </div>
+        ) : (
+          <Box>No accounts found. Please create a new account.</Box>
+        )
+      ) : accountsStatus === "failed" ? (
+        <Box>{accountsError}</Box>
+      ) : null}
     </Box>
   );
 };

@@ -1,7 +1,6 @@
 import { IAccount } from "@/types/Accounts";
 import {
   Box,
-  Button,
   Card,
   CardActions,
   CardContent,
@@ -42,14 +41,13 @@ const AccountItem = ({ account }: IAccountItemProps) => {
           <Typography variant="caption">{account.id}</Typography>{" "}
         </CardContent>
         <CardActions className={styles.actions}>
-          <Button
-            size="small"
-            variant="text"
-            className={styles.actionBtn}
-            href={`/account/${account.id}`}
+          <Link
+            href="/account/[id]"
+            as={`/account/${account.id}`}
+            className={styles.link}
           >
             View Details
-          </Button>
+          </Link>
         </CardActions>
       </Card>
     </Box>

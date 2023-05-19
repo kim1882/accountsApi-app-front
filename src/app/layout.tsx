@@ -1,5 +1,4 @@
-"use client";
-import { Container } from "@mui/material";
+import { Providers } from "@/store/provider";
 import "./globals.css";
 import { Inter } from "next/font/google";
 
@@ -18,7 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Container maxWidth={false}>{children}</Container>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

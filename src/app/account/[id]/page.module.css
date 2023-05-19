@@ -3,8 +3,8 @@
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: auto;
   grid-template-areas:
-    "accountsTitle newAccountBtn"
-    "accounts accounts";
+    "accountsTitle newTransactionBtn"
+    "transactions transactions";
 }
 
 .title {
@@ -12,14 +12,12 @@
 }
 
 .action {
-  grid-area: newAccountBtn;
+  grid-area: newTransactionBtn;
   justify-self: end;
   max-height: 40px;
 }
 
 .contentBody {
   margin-top: 2rem;
-  grid-area: accounts;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-area: transactions;
 }

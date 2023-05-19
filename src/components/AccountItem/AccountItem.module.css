@@ -15,9 +15,14 @@
   justify-content: right;
 }
 
-.actionBtn {
-  text-transform: capitalize;
+.link {
+  font-size: 12px;
+  font-weight: 500;
+  color: #1976d2;
+  border-radius: 6px;
+  padding: 4px;
 }
-.actionBtn:hover {
+
+.link:hover {
   background-color: lightgray;
 }
