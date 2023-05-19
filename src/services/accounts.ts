@@ -1,28 +1,23 @@
-import { TransactionEnum } from "@/types/Accounts"; // DELETE
+const API_URL = process.env.API_URL;
 
-export const fetchAccounts = () => {
-  // const response = await fetch(some url)
-  return {
-    data: [
-      { id: "123456789", name: "First account", transactions: [] },
-      {
-        id: "987654321",
-        name: "Second account really long name",
-        transactions: [
-          {
-            id: "t1",
-            date: "05/18/2023",
-            type: TransactionEnum.DEPOSIT,
-            amount: 250,
-          },
-          {
-            id: "t2",
-            date: "05/18/2023",
-            type: TransactionEnum.WITHDRAWAL,
-            amount: 20,
-          },
-        ],
-      },
-    ],
+export const loadAccountsService = async () => {
+  const res = await fetch(`${API_URL}/api/accounts`);
+  if (!res.ok) {
+    const message = `An error has occured: ${res.status}`;
+    throw new Error(message);
+  }
+  const accounts = await res.json();
+  return accounts;
+};
+
+export const deleteAccountService = async (id: string) => {
+  const options = {
+    method: "DELETE",
   };
+  const res = await fetch(`${API_URL}/api/accounts/${id}`, options);
+  if (!res.ok) {
+    const message = `An error has occured: ${res.status}`;
+    throw new Error(message);
+  }
+  return await res.json();
 };

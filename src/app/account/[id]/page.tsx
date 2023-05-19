@@ -18,7 +18,6 @@ interface IAccountDetailsProps {
 const AccountDetails = ({ params: { id } }: IAccountDetailsProps) => {
   const account = useSelector(selectAccountById(id));
   const { name, transactions } = account as IAccount;
-  console.log("Account ID", id, account);
 
   return (
     <Box mx={4} className={styles.content}>

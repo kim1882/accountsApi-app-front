@@ -1,7 +1,7 @@
-import { IAccount, TransactionEnum } from "@/types/Accounts";
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { IAccount } from "@/types/Accounts";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from ".";
-import { fetchAccounts } from "@/services/accounts";
+import { deleteAccountService, loadAccountsService } from "@/services/accounts";
 
 interface IAccountsInitialState {
   accounts: IAccount[];
@@ -20,7 +20,8 @@ const accountsSlice = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder
-      .addCase(loadAccounts.pending, (state, action) => {
+      // LOAD ACCOUNTS
+      .addCase(loadAccounts.pending, (state) => {
         state.status = "loading";
       })
       .addCase(loadAccounts.fulfilled, (state, action) => {
@@ -30,6 +31,19 @@ const accountsSlice = createSlice({
       .addCase(loadAccounts.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message || null;
+      })
+      // DELETE ACCOUNT
+      .addCase(deleteAccount.pending, (state, action) => {
+        state.status = "loading";
+      })
+      .addCase(deleteAccount.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        const { id } = action.payload;
+        state.accounts = state.accounts.filter((item) => item.id !== id);
+      })
+      .addCase(deleteAccount.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message || null;
       });
   },
 });
@@ -37,8 +51,16 @@ const accountsSlice = createSlice({
 export const loadAccounts = createAsyncThunk(
   "accounts/loadAccounts",
   async () => {
-    const response = await fetchAccounts();
-    return response.data;
+    const response = await loadAccountsService();
+    return response;
+  }
+);
+
+export const deleteAccount = createAsyncThunk(
+  "accounts/deleteAccount",
+  async (id: string) => {
+    const response = await deleteAccountService(id);
+    return response;
   }
 );
 

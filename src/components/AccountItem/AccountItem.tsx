@@ -11,14 +11,18 @@ import {
 import styles from "./AccountItem.module.css";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Link from "next/link";
+import { useAppDispatch } from "@/store";
+import { deleteAccount } from "@/store/accounts.slice";
 
 interface IAccountItemProps {
   account: IAccount;
 }
 
 const AccountItem = ({ account }: IAccountItemProps) => {
+  const dispatch = useAppDispatch();
+
   const onDelete = () => {
-    console.log("Delete", account.id);
+    dispatch(deleteAccount(account.id));
   };
 
   return (
