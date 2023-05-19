@@ -41,7 +41,7 @@ const Accounts = () => {
             ))}
           </div>
         ) : (
-          <Box>No accounts found. Please create a new account.</Box>
+          <Box mt="60px">No accounts found. Please create a new account.</Box>
         )
       ) : accountsStatus === "failed" ? (
         <Box>{accountsError}</Box>

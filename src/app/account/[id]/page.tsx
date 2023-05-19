@@ -31,13 +31,13 @@ const AccountDetails = ({ params: { id } }: IAccountDetailsProps) => {
       <Button size="small" variant="outlined" className={styles.action}>
         <AddIcon /> New transaction
       </Button>
-      <div className={styles.contentBody}>
-        {transactions.length ? (
+      {transactions.length ? (
+        <div className={styles.contentBody}>
           <Transactions transactions={transactions} />
-        ) : (
-          <Box>No transactions</Box>
-        )}
-      </div>
+        </div>
+      ) : (
+        <Box mt="60px">No transactions found.</Box>
+      )}
     </Box>
   );
 };
