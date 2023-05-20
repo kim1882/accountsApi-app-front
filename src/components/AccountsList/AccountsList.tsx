@@ -1,6 +1,6 @@
 import { Box, Button, Typography, CircularProgress } from "@mui/material";
 import styles from "./AccountsList.module.css";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { IAccount } from "@/types/Accounts";
 import AccountItem from "../AccountItem";
 import AddIcon from "@mui/icons-material/Add";
@@ -12,12 +12,14 @@ import {
 } from "@/store/accounts.slice";
 import { useAppDispatch } from "@/store";
 import { useSelector } from "react-redux";
+import NewAccountDialog from "../NewAccountDialog";
 
 const Accounts = () => {
   const dispatch = useAppDispatch();
   const accounts: IAccount[] = useSelector(selectAccounts);
   const accountsStatus = useSelector(selectAccountsStatus);
   const accountsError = useSelector(selectAccountsError);
+  const [openNewAccount, setOpenNewAccount] = useState<boolean>(false);
 
   useEffect(() => {
     if (accountsStatus === "idle") dispatch(loadAccounts());
@@ -28,7 +30,12 @@ const Accounts = () => {
       <Typography variant="h4" className={styles.title}>
         Accounts
       </Typography>
-      <Button size="small" variant="outlined" className={styles.action}>
+      <Button
+        size="small"
+        variant="outlined"
+        className={styles.action}
+        onClick={() => setOpenNewAccount(true)}
+      >
         <AddIcon /> New account
       </Button>
       {accountsStatus === "loading" ? (
@@ -46,6 +53,9 @@ const Accounts = () => {
       ) : accountsStatus === "failed" ? (
         <Box>{accountsError}</Box>
       ) : null}
+      {openNewAccount && (
+        <NewAccountDialog open={openNewAccount} setOpen={setOpenNewAccount} />
+      )}
     </Box>
   );
 };

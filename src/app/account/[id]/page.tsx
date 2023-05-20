@@ -8,6 +8,8 @@ import { selectAccountById } from "@/store/accounts.slice";
 import { IAccount } from "@/types/Accounts";
 import Transactions from "@/components/Transactions";
 import Link from "next/link";
+import { useState } from "react";
+import NewTransactionDialog from "@/components/NewTransactionDialog";
 
 interface IAccountDetailsProps {
   params: {
@@ -18,6 +20,7 @@ interface IAccountDetailsProps {
 const AccountDetails = ({ params: { id } }: IAccountDetailsProps) => {
   const account = useSelector(selectAccountById(id));
   const { name, transactions } = account as IAccount;
+  const [openNewTransaction, setOpenNewTransaction] = useState<boolean>(false);
 
   return (
     <Box mx={4} className={styles.content}>
@@ -27,7 +30,12 @@ const AccountDetails = ({ params: { id } }: IAccountDetailsProps) => {
       <Typography variant="h5" className={styles.title}>
         {name}
       </Typography>
-      <Button size="small" variant="outlined" className={styles.action}>
+      <Button
+        size="small"
+        variant="outlined"
+        className={styles.action}
+        onClick={() => setOpenNewTransaction(true)}
+      >
         <AddIcon /> New transaction
       </Button>
       {transactions.length ? (
@@ -36,6 +44,13 @@ const AccountDetails = ({ params: { id } }: IAccountDetailsProps) => {
         </div>
       ) : (
         <Box mt="60px">No transactions found.</Box>
+      )}
+      {openNewTransaction && (
+        <NewTransactionDialog
+          accountId={id}
+          open={openNewTransaction}
+          setOpen={setOpenNewTransaction}
+        />
       )}
     </Box>
   );

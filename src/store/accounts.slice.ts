@@ -1,7 +1,11 @@
 import { IAccount } from "@/types/Accounts";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from ".";
-import { deleteAccountService, loadAccountsService } from "@/services/accounts";
+import {
+  createAccountService,
+  deleteAccountService,
+  loadAccountsService,
+} from "@/services/accounts";
 
 interface IAccountsInitialState {
   accounts: IAccount[];
@@ -20,6 +24,18 @@ const accountsSlice = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder
+      // CREATE ACCOUNT
+      .addCase(createAccount.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(createAccount.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.accounts = state.accounts.concat(action.payload);
+      })
+      .addCase(createAccount.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message || null;
+      })
       // LOAD ACCOUNTS
       .addCase(loadAccounts.pending, (state) => {
         state.status = "loading";
@@ -47,6 +63,14 @@ const accountsSlice = createSlice({
       });
   },
 });
+
+export const createAccount = createAsyncThunk(
+  "accounts/createAccount",
+  async ({ id, name }: { id: string; name: string }) => {
+    const response = await createAccountService(id, name);
+    return response;
+  }
+);
 
 export const loadAccounts = createAsyncThunk(
   "accounts/loadAccounts",
