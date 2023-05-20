@@ -41,3 +41,30 @@ export const deleteAccountService = async (id: string) => {
   }
   return await res.json();
 };
+
+export const createTransactionService = async (
+  accountId: string,
+  type: string,
+  amount: number
+) => {
+  const options = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      type,
+      amount,
+    }),
+  };
+  const res = await fetch(
+    `${API_URL}/api/accounts/${accountId}/transactions`,
+    options
+  );
+  if (!res.ok) {
+    const message = `An error has occured: ${res.status}`;
+    throw new Error(message);
+  }
+  const updatedAccount = await res.json();
+  return updatedAccount;
+};

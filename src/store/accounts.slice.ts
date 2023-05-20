@@ -1,10 +1,11 @@
-import { IAccount } from "@/types/Accounts";
+import { IAccount, TransactionEnum } from "@/types/Accounts";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from ".";
 import {
   createAccountService,
   deleteAccountService,
   loadAccountsService,
+  createTransactionService,
 } from "@/services/accounts";
 
 interface IAccountsInitialState {
@@ -60,6 +61,27 @@ const accountsSlice = createSlice({
       .addCase(deleteAccount.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message || null;
+      })
+      // CREATE TRANSACTION
+      .addCase(createTransaction.pending, (state, action) => {
+        state.status = "loading";
+      })
+      .addCase(createTransaction.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        const { id, transactions } = action.payload;
+        state.accounts = state.accounts.map((item) => {
+          if (item.id === id) {
+            return {
+              ...item,
+              transactions,
+            };
+          }
+          return item;
+        });
+      })
+      .addCase(createTransaction.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message || null;
       });
   },
 });
@@ -84,6 +106,22 @@ export const deleteAccount = createAsyncThunk(
   "accounts/deleteAccount",
   async (id: string) => {
     const response = await deleteAccountService(id);
+    return response;
+  }
+);
+
+export const createTransaction = createAsyncThunk(
+  "accounts/createTransaction",
+  async ({
+    id,
+    type,
+    amount,
+  }: {
+    id: string;
+    type: TransactionEnum;
+    amount: number;
+  }) => {
+    const response = await createTransactionService(id, type, amount);
     return response;
   }
 );

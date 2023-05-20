@@ -1,5 +1,5 @@
 import { useAppDispatch } from "@/store";
-import { createAccount } from "@/store/accounts.slice";
+import { createAccount, createTransaction } from "@/store/accounts.slice";
 import { TransactionEnum } from "@/types/Accounts";
 import {
   Button,
@@ -8,11 +8,13 @@ import {
   DialogContent,
   DialogTitle,
   InputAdornment,
+  InputLabel,
   MenuItem,
   Select,
   TextField,
 } from "@mui/material";
 import { useState } from "react";
+import NumberFormatter from "./NumberFormatter";
 
 interface INewTransactionDialogProps {
   accountId: string;
@@ -26,7 +28,7 @@ const NewTransactionDialog = ({
   setOpen,
 }: INewTransactionDialogProps) => {
   const dispatch = useAppDispatch();
-  const [amount, setAmount] = useState<number>();
+  const [amount, setAmount] = useState<string>();
 
   const createNewTransaction = (event: React.FormEvent) => {
     event.preventDefault();
@@ -36,14 +38,24 @@ const NewTransactionDialog = ({
     // @ts-ignore
     const amount = currentTarget.amount.value;
     if (transactionType && amount) {
-      console.log(transactionType, amount);
-      // dispatch(createAccount({ id: accountId, name: accountName }));
-      // setOpen(false);
+      const transactionAmount = Number(amount.replace(/[^0-9.-]+/g, ""));
+      dispatch(
+        createTransaction({
+          id: accountId,
+          type: transactionType,
+          amount: transactionAmount,
+        })
+      );
+      setOpen(false);
     }
   };
 
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setAmount(event.target.value);
+  };
+
   return (
-    <Dialog open={open} onClose={() => setOpen(false)}>
+    <Dialog open={open} onClose={() => setOpen(false)} fullWidth>
       <form onSubmit={createNewTransaction}>
         <DialogTitle>Create New Transaction</DialogTitle>
         <DialogContent>
@@ -59,19 +71,21 @@ const NewTransactionDialog = ({
             margin="dense"
             value={accountId}
           />
-          <Select
+          <TextField
+            key="transactionType"
+            select
             fullWidth
+            margin="dense"
             name="transactionType"
             id="transactionType"
             label="Type"
           >
-            <MenuItem value={TransactionEnum.DEPOSIT}>
-              {TransactionEnum.DEPOSIT}
-            </MenuItem>
-            <MenuItem value={TransactionEnum.WITHDRAWAL}>
-              {TransactionEnum.WITHDRAWAL}
-            </MenuItem>
-          </Select>
+            {[TransactionEnum.DEPOSIT, TransactionEnum.WITHDRAWAL].map(
+              (item) => (
+                <MenuItem value={item}>{item.toUpperCase()}</MenuItem>
+              )
+            )}
+          </TextField>
           <TextField
             key={"amount"}
             id={"amount"}
@@ -82,10 +96,9 @@ const NewTransactionDialog = ({
             label={"Amount"}
             margin="dense"
             value={amount}
+            onChange={handleChange}
             InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">$</InputAdornment>
-              ),
+              inputComponent: NumberFormatter as any,
             }}
           />
         </DialogContent>
