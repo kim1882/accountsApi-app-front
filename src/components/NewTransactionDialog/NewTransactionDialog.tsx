@@ -1,5 +1,5 @@
 import { useAppDispatch } from "@/store";
-import { createAccount, createTransaction } from "@/store/accounts.slice";
+import { createTransaction } from "@/store/accounts.slice";
 import { TransactionEnum } from "@/types/Accounts";
 import {
   Button,

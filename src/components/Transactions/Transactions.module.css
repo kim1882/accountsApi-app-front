@@ -21,3 +21,13 @@
   font-weight: 500;
   color: red;
 }
+.title {
+  padding-right: 10px;
+}
+.balance {
+  justify-content: right;
+  font-size: 24px;
+  font-weight: 500;
+  padding: 20px 0;
+  display: flex;
+}
